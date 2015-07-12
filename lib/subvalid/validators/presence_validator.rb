@@ -1,7 +1,5 @@
-require "subvalid/validator_registry"
-
 module Subvalid
-  module Validator
+  module Validators
     class PresenceValidator
       def self.validate(object, validation_result=ValidationResult.new, *args)
         present = if object

@@ -1,7 +1,5 @@
-require "subvalid/validator_registry"
-
 module Subvalid
-  module Validator
+  module Validators
     class FormatValidator
       def self.validate(object, validation_result=ValidationResult.new, *args)
         options = args.to_h rescue args

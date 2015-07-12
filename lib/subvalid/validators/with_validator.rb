@@ -1,7 +1,5 @@
-require "subvalid/validator_registry"
-
 module Subvalid
-  module Validator
+  module Validators
     class WithValidator
       def self.validate(object, validation_result=ValidationResult.new, *args)
         case args[0]

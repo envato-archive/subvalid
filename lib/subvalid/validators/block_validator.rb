@@ -1,7 +1,5 @@
-require "subvalid/validator_registry"
-
 module Subvalid
-  module Validator
+  module Validators
     class BlockValidator
 
       class Context
