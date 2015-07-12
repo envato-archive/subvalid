@@ -8,11 +8,11 @@ you can define it in a separate class - so it's _"subjective"_. (as in **Sub**je
 
 Subvalid was extracted from a project at [Envato](http://envato.com) which
 required complex validation logic at each stage of the object's life cycle:
-- Users would upload videos. The videos are validated to make sure an actual
+- Users upload videos. The videos are validated to make sure an actual
   video was uploaded (and not someone's university Powerpoint slides), that
 framerate is good, resolution and codec is acceptable etc. Failure here would
 reject the file straight away, and tell the user to try again with a new file.
-- Then we'd generate thumbnails, resized preview videos etc. If anything failed
+- Next we generate thumbnails, resized preview videos etc. If anything fails
   validation here, it's a bug (wrong preview video size etc) - and we want to
 alert developers.
 - After the video is uploaded and processed, users would enter metadata: title,
@@ -21,15 +21,18 @@ just leave it as _"incomplete"_, and allow the user to come back later and
 complete it. Once this passes, the item is ready, and we submit it for review to
 our internal review team.
 
+While
 [ActiveModel::Validations](http://api.rubyonrails.org/classes/ActiveModel/Validations.html)
-is great if you've got simple validation logic. But it doesn't cut it for
-something complex like this where validation for the same object is different at
-each point in it's life cycle. It also hooks in pretty deep into
-[ActiveRecord](http://guides.rubyonrails.org/active_record_validations.html),
-and it's main use case assume you're just wanting to prevent bad data hitting
-your database - which isn't necessarily always the case.
+is great if you've got simple validation logic, it doesn't cut it for something
+complex like this. When you have different validation for the same object at
+each point in it's life cycle, you need something more flexible.
 
-We needed something more flexible.So Subvalid was born.
+ActiveModel also hooks in pretty deep into
+[ActiveRecord](http://guides.rubyonrails.org/active_record_validations.html).
+It's main use case assume you're just wanting to prevent bad data hitting your
+database - which isn't necessarily always the case.
+
+We needed something more. So Subvalid was born.
 
 And you can have the best of both worlds. Subvalid can exist alongside
 ActiveModel. ActiveModel::Validations is great for ensuring data consistency,
@@ -49,6 +52,8 @@ Or do it all in Subvalid - up to you.
   monkey patching, no object extension. Subvalid assumes POROs, but works with
 anything. A key design goal is to **not** pollute the objects being validated at
 all
+- Supports nested validation on nested object structures - and nicely handles
+  nested errors.
 
 ## Development Status [![travis ci build](https://api.travis-ci.org/envato/subvalid.svg)](https://travis-ci.org/envato/subvalid)
 
