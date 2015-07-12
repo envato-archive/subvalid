@@ -1,13 +1,19 @@
 require "spec_helper"
 
 describe Subvalid::Validator do
+  let(:stub_validator) {
+    -> (object, result) { "testing #{object} " }
+  }
   class FooValidator
     include Subvalid::Validator
 
-    validates test: true
-    validates :foo, test: true
+    STUB_VALIDATOR = -> (object, result) { result.add_error("testing #{object}") }
+
+
+    validates with: STUB_VALIDATOR
+    validates :foo, with: STUB_VALIDATOR
     validates :child do
-      validates :boz, test: true
+      validates :boz, with: STUB_VALIDATOR
     end
   end
 

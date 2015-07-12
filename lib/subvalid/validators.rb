@@ -1,4 +1,3 @@
-require "subvalid/validators/block_validator"
 require "subvalid/validators/format_validator"
 require "subvalid/validators/in_validator"
 require "subvalid/validators/length_validator"

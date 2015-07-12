@@ -8,33 +8,30 @@ module Subvalid
     end
 
     module DSL
-      def validates(*attributes, **validators, &block)
-        validators = validators.dup
-        if block
-          raise ":block is a reserved option" if validators[:block]
-          validators[:block] = block
-        end
 
-        if validators.empty?
+      def validates(*attributes, **validators, &block)
+        if validators.empty? && !block
           raise "no validations or block specified"
         end
 
         attributes = [:base] if attributes.empty?
 
-        add_validations(attributes, validators)
+        add_validations(attributes, validators, block)
       end
 
       private
-      ValidatorEntry = Struct.new(:validator_key, :args)
+      ValidatorEntry = Struct.new(:validator, :args)
       def validations
         @validations ||= Hash.new{|vals,attribute| vals[attribute] = [] }
       end
 
-      def add_validations(attributes, validators)
+      def add_validations(attributes, validators, block)
         attributes.each do |attribute|
           validators.each do |validator_key, args|
-            validations[attribute] << ValidatorEntry.new(validator_key, args)
+            validator = ValidatorRegistry[validator_key]
+            validations[attribute] << ValidatorEntry.new(validator, args)
           end
+          validations[attribute] << ValidatorEntry.new(BlockValidator, block) if block
         end
       end
     end
@@ -49,7 +46,7 @@ module Subvalid
                              end
 
           validators.each do |validator_entry|
-            validator = ValidatorRegistry[validator_entry.validator_key]
+            validator = validator_entry.validator
             if attribute == :base
               validator.validate(object, attribute_result, *validator_entry.args)
             elsif object
@@ -62,6 +59,22 @@ module Subvalid
           validation_result.merge_child!(attribute, attribute_result) unless attribute == :base
         end
         validation_result
+      end
+    end
+
+    class BlockValidator
+      class Context
+        include Subvalid::Validator::DSL
+        include Subvalid::Validator::API
+      end
+
+      def self.validate(object, validation_result=ValidationResult.new, *args)
+        #return unless object # don't pass nil object into block - this should be handled with a PresenceValidator if it needs to be flagged as a validation error
+        block = args[0]
+
+        context = Context.new
+        context.instance_exec(&block)
+        context.validate(object, validation_result, args)
       end
     end
   end
