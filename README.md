@@ -50,8 +50,7 @@ Or do it all in Subvalid - up to you.
 anything. A key design goal is to **not** pollute the objects being validated at
 all
 
-## Development Status [![travis ci
-build](https://api.travis-ci.org/envato/subvalid.svg)](https://travis-ci.org/envato/subvalid)
+## Development Status [![travis ci build](https://api.travis-ci.org/envato/subvalid.svg)](https://travis-ci.org/envato/subvalid)
 
 Subvalid is extracted from production code in use at Envato. However, it is undergoing early development, and APIs and features are almost certain to be in flux.
 
