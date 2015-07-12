@@ -7,7 +7,7 @@ you can define it in a separate class - so it's _"subjective"_. (as in **Sub**je
 **valid**ation).
 
 Subvalid was extracted from a project at [Envato](http://envato.com) which
-required complex validation logic at each stage of the object's life cycle:
+requires complex validation logic at each stage of an object's life cycle:
 - Users upload videos. The videos are validated to make sure an actual
   video was uploaded (and not someone's university Powerpoint slides), that
 framerate is good, resolution and codec is acceptable etc. Failure here would
@@ -20,6 +20,10 @@ alert developers.
 just leave it as _"incomplete"_, and allow the user to come back later and
 complete it. Once this passes, the item is ready, and we submit it for review to
 our internal review team.
+
+All these steps are done asynchronously, so we need to capture the errors, save
+them to a different field on the item, and carry on to report results back to
+the user.
 
 While
 [ActiveModel::Validations](http://api.rubyonrails.org/classes/ActiveModel/Validations.html)
@@ -54,6 +58,8 @@ anything. A key design goal is to **not** pollute the objects being validated at
 all
 - Supports nested validation on nested object structures - and nicely handles
   nested errors.
+- DSL and API inspired by ActiveModel::Validations - just simplified and more
+  consistent.
 
 ## Development Status [![travis ci build](https://api.travis-ci.org/envato/subvalid.svg)](https://travis-ci.org/envato/subvalid)
 
