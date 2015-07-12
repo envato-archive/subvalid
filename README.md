@@ -3,8 +3,8 @@
 Subvalid decouples your validation logic from your object structure. With
 Subvalid you can define different validation rules for different contexts. So
 rather than defining validation on the object, and having it be _"objective"_,
-you can define it in a separate class - so it's _"subjective"_. (as in *Sub*jective
-*valid*ation).
+you can define it in a separate class - so it's _"subjective"_. (as in **Sub**jective
+**valid**ation).
 
 Subvalid was extracted from a project at [Envato](http://envato.com) which
 required complex validation logic at each stage of the object's life cycle:
@@ -47,7 +47,7 @@ Or do it all in Subvalid - up to you.
 - Failing validation does not block saving to the database
 - Does not add _anything_ at all to business objects. No including modules, no
   monkey patching, no object extension. Subvalid assumes POROs, but works with
-anything. A key design goal is to *NOT* pollute the objects being validated at
+anything. A key design goal is to **not** pollute the objects being validated at
 all
 
 ## Getting Started
