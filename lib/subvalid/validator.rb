@@ -59,7 +59,7 @@ module Subvalid
             end
           end
 
-          validation_result.merge_child(attribute, attribute_result) unless attribute == :base
+          validation_result.merge_child!(attribute, attribute_result) unless attribute == :base
         end
         validation_result
       end

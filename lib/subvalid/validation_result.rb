@@ -19,25 +19,18 @@ module Subvalid
       children[attribute]
     end
 
-    def merge_child(attribute, result)
+    def merge_child!(attribute, result)
       child = children[attribute]
       if child
-        children[attribute] = child.merge(result)
+        child.merge!(result)
       else
         children[attribute] = result
       end
     end
 
-    def merge(result)
-      errors += result.errors
-      children.merge!(result.children){|key, old_child, new_child|
-        old_child.merge(new_child)
-      }
-    end
-
     def to_h
       hash = {}
-      hash[:base] = errors.dup unless errors.empty?
+      hash[:errors] = errors.dup unless errors.empty?
       children.each do |attribute, child|
         hash[attribute] = child.to_h unless child.valid?
       end
@@ -45,9 +38,14 @@ module Subvalid
     end
 
     def flatten(parent_attributes=[])
+      # TODO make this more flexible than just hardcoded format
       flat_errors = errors.map{|error|
-        human_keys = parent_attributes.map{|a| a.to_s.gsub('_', ' ')}
-        human_keys.join(", ") + ": " + error
+        if parent_attributes.empty?
+          error
+        else
+          human_keys = parent_attributes.map{|a| a.to_s.gsub('_', ' ')}
+          [human_keys.join(", "), error].join(": ")
+        end
       }
       children.each do |attribute, child|
         flat_errors += child.flatten(parent_attributes + [attribute])
@@ -55,12 +53,13 @@ module Subvalid
       flat_errors
     end
 
-    def to_s
-      to_h.to_s
-    end
-
-    def inspect
-      to_s
+    protected
+    def merge!(result)
+      @errors += result.errors
+      children.merge!(result.children){|key, old_child, new_child|
+        old_child.merge!(new_child)
+        old_child
+      }
     end
   end
 end
