@@ -3,8 +3,8 @@ module Subvalid
     class BlockValidator
 
       class Context
-        include DSL
-        include API
+        include Validator::DSL
+        include Validator::API
       end
 
       def self.validate(object, validation_result=ValidationResult.new, *args)
