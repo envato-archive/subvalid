@@ -1,7 +1,7 @@
 module Subvalid
   class ValidatorRegistry
     class << self
-      def validator(key)
+      def [](key)
         validators[key] or raise "no validator with key=#{key}"
       end
 

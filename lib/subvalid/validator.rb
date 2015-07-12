@@ -49,7 +49,7 @@ module Subvalid
                              end
 
           validators.each do |validator_entry|
-            validator = ValidatorRegistry.validator(validator_entry.validator_key)
+            validator = ValidatorRegistry[validator_entry.validator_key]
             if attribute == :base
               validator.validate(object, attribute_result, *validator_entry.args)
             elsif object
