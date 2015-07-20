@@ -83,7 +83,77 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Say you've got some object:
+```ruby
+Person = Struct.new(:name)
+madlep = Person.new("madlep")
+```
+
+You can validate it with Subvalid like this:
+```ruby
+require 'subvalid'
+
+class PersonValidator
+  include Subvalid::Validator
+
+  validates :name, presence: true
+end
+
+PersonValidator.validate(madlep).valid? # => true
+```
+
+`validate` returns a validation result. You can check if it is `#valid?` or if
+it has `errors` on an attribute
+```ruby
+result = PersonValidator.validate(Person.new(nil))
+result.valid? # => false
+result.errors[:name] # => ["is not present"]
+```
+
+Of course, because Subvalid only cares about duck-types, and not any particular
+modelling framework, this validator works equally well with any type of object -
+so long as it responds to `name`
+
+```ruby
+class Person < ActiveRecord::Base
+end
+
+madlepAR = Person.create(name: "madlep")
+
+PersonValidator.validate(madlepAR).valid? # => true
+```
+
+And you can validate nested data structures
+```ruby
+Video = Struct.new(:title, :length, :author)
+
+class VideoValidator
+  include Subvalid::Validator
+
+  validates :title, presence: true
+  validates :length, presence: true
+  validates :author do
+    validates :name, presence: true
+  end
+end
+
+invalid_video = Video.new(nil, nil, Person.new(nil))
+result = VideoValidator.validate(video)
+result.to_h # => {:title=>{:errors=>["is not present"]}, :length=>{:errors=>["is not present"]}, :author=>{:name=>{:errors=>["is not present"]}}}
+```
+
+
+Or you can DRY up your validation code by composing validators together
+```ruby
+class VideoValidator
+  include Subvalid::Validator
+
+  validates :title, presence: true
+  validates :length, presence: true
+  validates :author, with: PersonValidator
+end
+```
+
 
 ## Contributing
 
