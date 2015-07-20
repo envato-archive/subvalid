@@ -156,10 +156,8 @@ end
 
 ## Contact
 
-- [github project](https://github.com/envato/rack-ecg)
-- [gitter chat room ![Join the chat at
-  https://gitter.im/envato/rack-ecg](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/envato/rack-ecg)
-- Bug reports and feature requests are via [github issues](https://github.com/envato/rack-ecg/issues)
+- [github project](https://github.com/envato/subvalid)
+- Bug reports and feature requests are via [github issues](https://github.com/envato/subvalid/issues)
 
 ## Maintainers
 
