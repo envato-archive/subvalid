@@ -154,11 +154,36 @@ class VideoValidator
 end
 ```
 
+## Contact
+
+- [github project](https://github.com/envato/rack-ecg)
+- [gitter chat room ![Join the chat at
+  https://gitter.im/envato/rack-ecg](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/envato/rack-ecg)
+- Bug reports and feature requests are via [github issues](https://github.com/envato/rack-ecg/issues)
+
+## Maintainers
+
+- [Julian Doherty](https://github.com/madlep)
+
+## License
+
+`Subvalid` uses MIT license. See
+[`LICENSE.txt`](https://github.com/envato/subvalid/blob/master/LICENSE.txt) for
+details.
+
+## Code of conduct
+
+We welcome contribution from everyone. Read more about it in
+[`CODE_OF_CONDUCT.md`](https://github.com/envato/subvalid/blob/master/CODE_OF_CONDUCT.md)
 
 ## Contributing
 
+For bug fixes, documentation changes, and small features:
+
 1. Fork it ( https://github.com/[my-github-username]/subvalid/fork )
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
+2. Create your feature branch (git checkout -b my-new-feature)
+3. Commit your changes (git commit -am 'Add some feature')
+4. Push to the branch (git push origin my-new-feature)
 5. Create a new Pull Request
+
+For larger new features: Do everything as above, but first also make contact with the project maintainers to be sure your change fits with the project direction and you won't be wasting effort going in the wrong direction
