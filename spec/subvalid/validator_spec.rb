@@ -11,7 +11,7 @@ describe Subvalid::Validator do
 
 
     validates with: STUB_VALIDATOR
-    validates :foo, with: STUB_VALIDATOR
+    validates :foo, with: STUB_VALIDATOR, if: -> (record) { record.some_predicate? }
     validates :child do
       validates :boz, with: STUB_VALIDATOR
     end
@@ -24,9 +24,13 @@ describe Subvalid::Validator do
   end
   Subvalid::ValidatorRegistry.register(:test, TestValidator)
 
-  Poro = Struct.new(:foo, :bar, :child) do
+  Poro = Struct.new(:foo, :bar, :child, :some_predicate) do
     def to_s
       "I'M A PORO"
+    end
+
+    def some_predicate?
+      some_predicate
     end
   end
 
@@ -36,8 +40,16 @@ describe Subvalid::Validator do
     end
   end
 
-  let(:poro) { Poro.new("foo", "bar", 
-                        PoroChild.new("baz", "boz")) }
+  let(:poro) {
+    Poro.new(
+      "foo",
+      "bar",
+      PoroChild.new("baz", "boz"),
+      some_predicate
+    )
+  }
+
+  let(:some_predicate) { true }
 
   describe "#validate" do
     subject { FooValidator.validate(poro) }
@@ -55,6 +67,17 @@ describe Subvalid::Validator do
 
     it "validates child" do
       expect(subject[:child][:boz].errors).to eq(["testing boz"])
+    end
+
+    context "when `if` modifier returns false" do
+      let(:some_predicate) { false }
+      it "doesn't execute validator" do
+        expect(subject[:foo].errors).to eq([])
+      end
+
+      it "executes other validators" do
+        expect(subject[:child][:boz].errors).to eq(["testing boz"])
+      end
     end
   end
 
