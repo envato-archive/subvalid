@@ -13,7 +13,7 @@ describe Subvalid::ValidatorRegistry do
 
     context "when validator doesn't exist" do
       it "raises an error" do
-        expect { described_class[:bad_key] }.to raise_error
+        expect { described_class[:bad_key] }.to raise_error(ArgumentError)
       end
     end
   end
