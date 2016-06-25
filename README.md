@@ -154,6 +154,16 @@ class VideoValidator
 end
 ```
 
+Validator execution on specific fields can be run or skipped at validation time
+by passing an `if` validator proc, which decides if the validation should run
+```ruby
+class PersonValidator
+  include Subvalid::Validator
+
+  validates :postcode, presence: true, if: -> (person) { person.country == "US" }
+end
+```
+
 ## Contact
 
 - [github project](https://github.com/envato/subvalid)
