@@ -9,6 +9,8 @@ module Subvalid
 
     module DSL
 
+      MODIFIERS = [:if]
+
       def validates(*attributes, **validators, &block)
         if validators.empty? && !block
           raise "no validations or block specified"
@@ -20,19 +22,29 @@ module Subvalid
       end
 
       private
-      ValidatorEntry = Struct.new(:validator, :args)
+      ValidatorEntry = Struct.new(:validator, :modifiers, :args)
       def validations
         @validations ||= Hash.new{|vals,attribute| vals[attribute] = [] }
       end
 
       def add_validations(attributes, validators, block)
+        modifiers, validators = extract_modifiers(validators)
         attributes.each do |attribute|
           validators.each do |validator_key, args|
             validator = ValidatorRegistry[validator_key]
-            validations[attribute] << ValidatorEntry.new(validator, args)
+            validations[attribute] << ValidatorEntry.new(validator, modifiers, args)
           end
-          validations[attribute] << ValidatorEntry.new(BlockValidator, block) if block
+          validations[attribute] << ValidatorEntry.new(BlockValidator, modifiers, block) if block
         end
+      end
+
+      def extract_modifiers(validators)
+        modifiers = MODIFIERS.inject([]){|acc, mod_key|
+          modifier_proc = validators.delete(mod_key)
+          acc <<  modifier_proc if modifier_proc
+          acc
+        }
+        [modifiers, validators]
       end
     end
 
@@ -46,13 +58,15 @@ module Subvalid
                              end
 
           validators.each do |validator_entry|
-            validator = validator_entry.validator
-            if attribute == :base
-              validator.validate(object, attribute_result, *validator_entry.args)
-            elsif object
-              validator.validate(object.send(attribute), attribute_result, *validator_entry.args)
-            else
-              # no-op if we 're asked to validate an attribute for a nil value - that needs to be caught by a user defined `presence` validation instead
+            if validator_entry.modifiers.map{|m| m.call(object)}.all?
+              validator = validator_entry.validator
+              if attribute == :base
+                validator.validate(object, attribute_result, *validator_entry.args)
+              elsif object
+                validator.validate(object.send(attribute), attribute_result, *validator_entry.args)
+              else
+                # no-op if we 're asked to validate an attribute for a nil value - that needs to be caught by a user defined `presence` validation instead
+              end
             end
           end
 
