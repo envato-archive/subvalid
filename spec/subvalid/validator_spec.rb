@@ -17,13 +17,6 @@ describe Subvalid::Validator do
     end
   end
 
-  class TestValidator
-    def self.validate(object, validation_result=ValidationResult.new, *args)
-      validation_result.add_error("testing #{object}")
-    end
-  end
-  Subvalid::ValidatorRegistry.register(:test, TestValidator)
-
   Poro = Struct.new(:foo, :bar, :child, :some_predicate) do
     def to_s
       "I'M A PORO"
