@@ -6,6 +6,8 @@ module Subvalid
         args = args.to_h
         args.each do |operator, value|
           case operator
+          when :minimum
+            validation_result.add_error("is too short, minimum is #{value}") if object.size < value
           when :maximum
             validation_result.add_error("is too long, maximum is #{value}") if object.size > value
             # TODO ALL the other operators from http://guides.rubyonrails.org/active_record_validations.html#length
