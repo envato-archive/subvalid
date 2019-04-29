@@ -164,6 +164,35 @@ class PersonValidator
 end
 ```
 
+### Length Options
+
+You can specify length constraints in different ways:
+
+```ruby
+class PersonValidator
+  include Subvalid::Validator
+
+  validates :name, length: { minimum: 2 }
+  validates :bio, length: { maximum: 500 }
+  validates :password, length: { in: 6..20 }
+  validates :registration_number, length: { is: 6 }
+end
+```
+
+The possible length constraint options are:
+
+`:minimum` - The attribute cannot have less than the specified length.
+
+`:maximum` - The attribute cannot have more than the specified length.
+
+`:in` (or `:within`) - The attribute length must be included in a given interval. The value for this option must be a range.
+
+`:is` - The attribute length must be equal to the given value.
+
+The default error messages depend on the type of length validation being performed. You can use the `:message` option to specify an error message.
+
+Note that the default error messages are plural. A personalised message should be provided in cases where it is grammatically incorrect, eg, "cannot be shorter than 1 characters".
+
 ## Contact
 
 - [github project](https://github.com/envato/subvalid)
