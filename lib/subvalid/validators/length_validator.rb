@@ -14,9 +14,9 @@ module Subvalid
           when :is
             validation_result.add_error(message || "should have exactly #{value} characters") if object.size != value
           when :in, :within
-            validation_result.add_error(
-              message || "should contain #{value.first} to #{value.last} characters"
-            ) unless value.include? object.size
+            unless value.include?(object.size)
+              validation_result.add_error(message || "should contain #{value.first} to #{value.last} characters")
+            end
           else
             raise "don't know what to do with operator=#{operator}"
           end
