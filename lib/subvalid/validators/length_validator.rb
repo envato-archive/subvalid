@@ -4,11 +4,19 @@ module Subvalid
       def self.validate(object, validation_result=ValidationResult.new, *args)
         return unless object
         args = args.to_h
+        message = args.delete(:message)
         args.each do |operator, value|
           case operator
+          when :minimum
+            validation_result.add_error(message || "cannot be shorter than #{value} characters") if object.size < value
           when :maximum
-            validation_result.add_error("is too long, maximum is #{value}") if object.size > value
-            # TODO ALL the other operators from http://guides.rubyonrails.org/active_record_validations.html#length
+            validation_result.add_error(message || "cannot be longer than #{value} characters") if object.size > value
+          when :is
+            validation_result.add_error(message || "should have exactly #{value} characters") if object.size != value
+          when :in, :within
+            unless value.include?(object.size)
+              validation_result.add_error(message || "should contain #{value.first} to #{value.last} characters")
+            end
           else
             raise "don't know what to do with operator=#{operator}"
           end
